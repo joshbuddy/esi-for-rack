@@ -1,0 +1,12 @@
+<esi:try>
+  <esi:attempt>
+    This is my include: <esi:include src="http://www.sample.com" />
+    Choice/<esi:choose>
+      <esi:when test="1==2">false</esi:when>
+      <esi:when test="1==1">true</esi:when>
+    </esi:choose>/Choice
+  </esi:attempt>
+  <esi:except>
+    BLAH!
+  </esi:except>
+</esi:try>

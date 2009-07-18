@@ -1,0 +1,12 @@
+<html><body>
+<esi:choose>
+  <esi:when test="$(HTTP_ACCEPT_LANGUAGE{en})">EN</esi:when>
+</esi:choose>
+<esi:choose>
+  <esi:when test="$(HTTP_ACCEPT_LANGUAGE{da})">DA</esi:when>
+</esi:choose>
+<esi:choose>
+  <esi:when test="$(HTTP_ACCEPT_LANGUAGE{en-gb})">EN-GB</esi:when>
+</esi:choose>
+
+</body></html>
