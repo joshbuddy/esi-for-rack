@@ -1,5 +1,7 @@
+require 'lib/esi_for_rack'
+
 begin
-  require 'esi_for_rack'
+  require 'jeweler'
   Jeweler::Tasks.new do |s|
     s.name = "esi-for-rack"
     s.description = s.summary = "ESI for Rack"
