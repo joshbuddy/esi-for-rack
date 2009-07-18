@@ -1,7 +1,7 @@
 begin
   require 'esi_for_rack'
   Jeweler::Tasks.new do |s|
-    s.name = "esi_for_rack"
+    s.name = "esi-for-rack"
     s.description = s.summary = "ESI for Rack"
     s.email = "joshbuddy@gmail.com"
     s.homepage = "http://github.com/joshbuddy/esi_for_rack"
