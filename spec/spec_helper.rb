@@ -5,11 +5,20 @@ require 'lib/esi_for_rack'
 
 def build_app(file, lookup)
   builder = Rack::Builder.new do
-    use EsiForRack, lookup
+    use EsiForRack
     
     run proc { |env|
-      data = IO.read(file)
-      [200, {'Content-type' => 'text/html', 'Content-length' => data.size.to_s}, [data]]
+      data = if env['PATH_INFO'] == '/'
+        IO.read(file)
+      else
+        lookup[env['PATH_INFO']]
+      end
+      
+      if data 
+        [200, {'Content-type' => 'text/html', 'Content-length' => data.size.to_s}, [data]]
+      else
+        [404, {}, []]
+      end
     }
   end
   

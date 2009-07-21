@@ -5,21 +5,23 @@ require 'esi_attribute_language'
 require 'parse_user_agent'
 
 require File.join(File.dirname(__FILE__), 'esi_for_rack', 'node')
-#require File.join(File.dirname(__FILE__), 'esi_for_rack', 'node2')
+require File.join(File.dirname(__FILE__), 'esi_for_rack', 'lookup')
 
 class EsiForRack
   
-  def initialize(app, lookup)
+  def initialize(app, lookup = nil)
     @app = app
     @lookup = lookup
   end
   
   def call(env)
+    @lookup ||= Lookup::PassThrough.new(@app, env)
+    
     request = Rack::Request.new(env)
     result = @app.call(env)
     response = Rack::Response.new(result[2], result[0], result[1])
 
-    if response['Content-Type'] == 'text/html'
+    if response['Content-Type'] =~ /text\/html/
       body = ""
       response.body.each do |part|
         body << part
