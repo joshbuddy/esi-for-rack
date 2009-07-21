@@ -24,9 +24,9 @@ class EsiForRack
         @resolved_alt = EsiAttributeLanguage::SimpleGrammar.parse(@node['alt']).execute(context.resolver) if @node['alt']
         @continue_on_error = node['onerror'] == 'continue'
 
-        context.lookup[@resolved_src] ||
-        (@resolved_alt && context.lookup[@resolved_alt]) || 
-        (!@continue_on_error && raise(IncludeFailedError.new)) || nil
+        context.lookup[@resolved_src] or
+        (@resolved_alt && context.lookup[@resolved_alt]) or
+        (!@continue_on_error && raise(IncludeFailedError.new)) or nil
       end
 
     end
