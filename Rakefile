@@ -10,6 +10,8 @@ begin
     s.authors = ["Joshua Hull"]
     s.files = FileList["[A-Z]*", "{lib,spec}/**/*"]
     s.add_dependency 'joshbuddy-esi_attribute_language'
+    s.add_dependency 'nokogiri'
+    s.add_dependency 'jaxn-parse_user_agent'
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"

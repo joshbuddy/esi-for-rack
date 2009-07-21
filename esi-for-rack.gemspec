@@ -6,13 +6,18 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Joshua Hull"]
-  s.date = %q{2009-07-18}
+  s.date = %q{2009-07-21}
   s.description = %q{ESI for Rack}
   s.email = %q{joshbuddy@gmail.com}
+  s.extra_rdoc_files = [
+    "README.rdoc"
+  ]
   s.files = [
-    "Rakefile",
+    "README.rdoc",
+     "Rakefile",
      "VERSION",
      "lib/esi_for_rack.rb",
+     "lib/esi_for_rack/lookup.rb",
      "lib/esi_for_rack/node.rb",
      "spec/http_integration/accept_language_spec.rb",
      "spec/http_integration/cookie_spec.rb",
@@ -68,10 +73,16 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<joshbuddy-esi_attribute_language>, [">= 0"])
+      s.add_runtime_dependency(%q<nokogiri>, [">= 0"])
+      s.add_runtime_dependency(%q<jaxn-parse_user_agent>, [">= 0"])
     else
       s.add_dependency(%q<joshbuddy-esi_attribute_language>, [">= 0"])
+      s.add_dependency(%q<nokogiri>, [">= 0"])
+      s.add_dependency(%q<jaxn-parse_user_agent>, [">= 0"])
     end
   else
     s.add_dependency(%q<joshbuddy-esi_attribute_language>, [">= 0"])
+    s.add_dependency(%q<nokogiri>, [">= 0"])
+    s.add_dependency(%q<jaxn-parse_user_agent>, [">= 0"])
   end
 end
