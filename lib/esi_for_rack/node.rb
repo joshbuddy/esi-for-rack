@@ -113,18 +113,27 @@ class EsiForRack
 
       def process(doc_fragment)
         # have to go one at a time because of limitation of .css, its not a live list.
-        while esi_node = doc_fragment.css('esi_try,esi_choose,esi_vars,esi_include')[0]
-          case esi_node.name.to_sym
-          when :esi_include
-            @include.init(esi_node, self).execute_in_place!
-          when :esi_choose
-            @choose.init(esi_node, self).execute_in_place!
-          when :esi_vars
-            @vars.init(esi_node, self).execute_in_place!
-          when :esi_try
-            @try.init(esi_node, self).execute_in_place!
+        # ps, i'll only break if i totally have to
+        loop do
+          should_break = true
+          doc_fragment.css('esi_try,esi_choose,esi_vars,esi_include').each do |esi_node|
+            should_break = false
+            print "bleh!" unless esi_node
+            case esi_node.name.to_sym
+            when :esi_include
+              @include.init(esi_node, self).execute_in_place!
+            when :esi_choose
+              @choose.init(esi_node, self).execute_in_place!
+            when :esi_vars
+              @vars.init(esi_node, self).execute_in_place!
+            when :esi_try
+              @try.init(esi_node, self).execute_in_place!
+              break
+            end
           end
+          break if should_break
         end
+        
       end
     end
     
