@@ -1,0 +1,34 @@
+= EsiForRack 
+
+== What is ESI?
+
+ESI is a standard way to assemble pages. This spec is supported by several reverse proxies.
+
+http://slideshare.net/joshbuddy/to-the-edge-of-web-performance-and-beyond
+
+== Usage
+
+In your builder, just use it.
+
+  use EsiForRack
+
+In your HTTP responses, just normal ESI tags. If you're working within Rails, give Spackle a try. 
+
+http://github.com/joshbuddy/spackle
+
+Here is an example of a response that would be parsed by EsiForRack
+
+  <html>
+    <body>
+      <esi:include src="/helloworld"/>
+    </body>
+  </html>
+  
+In this case, a request to <tt>/helloworld</tt> would be made by EsiForRack to fill in the request. If your application sent: "Hey world" as a response to <tt>/helloworld</tt> the above example would be interpolated to:
+
+  <html>
+    <body>
+      Hey world
+    </body>
+  </html>
+
