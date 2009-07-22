@@ -19,14 +19,22 @@ class EsiForRack
 
     class Include < Node
       
-      def execute
-        @resolved_src = EsiAttributeLanguage::SimpleGrammar.parse(@node['src']).execute(context.resolver)
-        @resolved_alt = EsiAttributeLanguage::SimpleGrammar.parse(@node['alt']).execute(context.resolver) if @node['alt']
-        @continue_on_error = node['onerror'] == 'continue'
+      def resolved_src
+        EsiAttributeLanguage::SimpleGrammar.parse(@node['src']).execute(context.resolver)
+      end
+      
+      def resolved_alt
+        EsiAttributeLanguage::SimpleGrammar.parse(@node['alt']).execute(context.resolver) if @node['alt']
+      end
 
-        context.lookup[@resolved_src] or
-        (@resolved_alt && context.lookup[@resolved_alt]) or
-        (!@continue_on_error && raise(IncludeFailedError.new)) or nil
+      def continue_on_error?
+        node['onerror'] == 'continue'
+      end
+      
+      def execute
+        context.lookup[resolved_src] or
+        (resolved_alt && context.lookup[resolved_alt]) or
+        (!continue_on_error? && raise(IncludeFailedError.new)) or nil
       end
 
     end

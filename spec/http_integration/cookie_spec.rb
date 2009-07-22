@@ -16,7 +16,7 @@ describe "esi cookie variable lookups" do
 
     request = Rack::MockRequest.env_for("/?#{Rack::Utils.build_query(vars)}")
     request['HTTP_COOKIE'] = 'id=1'
-    builder.call(request).last.should == ["<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n<html><body>resource</body></html>\n"]
+    builder.call(request).last.should == ["<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n<html><body>\nresource\n</body></html>\n"]
     
   end
   
