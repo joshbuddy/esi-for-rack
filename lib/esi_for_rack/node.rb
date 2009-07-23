@@ -32,8 +32,8 @@ class EsiForRack
       end
       
       def execute
-        context.lookup[resolved_src] or
-        (resolved_alt && context.lookup[resolved_alt]) or
+        context.lookup(resolved_src) or
+        (resolved_alt && context.lookup(resolved_alt)) or
         (!continue_on_error? && raise(IncludeFailedError.new)) or nil
       end
 
@@ -92,17 +92,24 @@ class EsiForRack
     
     class Context
       
-      attr_reader :resolver, :lookup, :doc
+      attr_reader :resolver, :doc
       
       def initialize(resolver, lookup)
         @resolver = resolver
-        @lookup = lookup
-        
+        @lookup = lookup.is_a?(Array) ? lookup : [lookup]
         @include = Include.new
         @choose = Choose.new
         @vars = Vars.new
         @try = Try.new
         
+      end
+    
+      def lookup(url)
+        @lookup.each do |l|
+          resolved_body = l[url]
+          return resolved_body if resolved_body
+        end
+        nil
       end
     
       def parse(document)

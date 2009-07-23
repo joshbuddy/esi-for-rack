@@ -1,8 +1,11 @@
+require 'net/http'
+require 'uri'
+
 class EsiForRack
 
   class Lookup
     
-    class PassThrough < Lookup
+    class Http
       
       def initialize(app, env)
         @app = app
@@ -10,6 +13,26 @@ class EsiForRack
       end
       
       def [](path)
+        return unless path[0,4] == 'http'
+        uri = URI(path)
+        res = Net::HTTP.start(uri.host, uri.port) {|http|
+          http.get(uri.request_uri)
+        }
+        res.body if res.code == '200'
+      end
+      
+    end
+    
+    class PassThrough
+      
+      def initialize(app, env)
+        @app = app
+        @env = env
+      end
+      
+      def [](path)
+        return if path[0,4] == 'http'
+        
         uri = URI(path)
         
         request = {

@@ -15,8 +15,7 @@ class EsiForRack
   end
   
   def call(env)
-    @lookup ||= Lookup::PassThrough.new(@app, env)
-    
+    @lookup ||= [Lookup::PassThrough.new(@app, env), Lookup::Http.new(@app, env)]
     request = Rack::Request.new(env)
     result = @app.call(env)
     response = Rack::Response.new(result[2], result[0], result[1])
@@ -48,10 +47,8 @@ class EsiForRack
         # error parsing ua
       end
       
-      
-      
       binding = {
-        :HTTP_ACCEPT_LANGUAGE => Set.new((env['HTTP_ACCEPT_LANGUAGE'] || '').split(',').map{|l| l.strip.gsub(/q=[0-9]\.[0-9]{1,3}/, '').gsub(';','')}),
+        :HTTP_ACCEPT_LANGUAGE => Set.new((env['HTTP_ACCEPT_LANGUAGE'] || '').split(',').map{|l| l.gsub(/q=[0-9]\.[0-9]{1,3}/, '').gsub(';','').strip}),
         :HTTP_COOKIE => request.cookies,
         :HTTP_HOST => request.host,
         :HTTP_REFERER => request.referer,
