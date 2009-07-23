@@ -133,7 +133,6 @@ class EsiForRack
           should_break = true
           doc_fragment.css('esi_try,esi_choose,esi_vars,esi_include').each do |esi_node|
             should_break = false
-            print "bleh!" unless esi_node
             case esi_node.name.to_sym
             when :esi_include
               @include.init(esi_node, self).execute_in_place!
