@@ -63,18 +63,4 @@ class EsiForRack
     
   end
   
-  class IOWrapper
-    def initialize(body)
-      @body = body.each
-    end
-
-    def read
-      @body.end?
-    end
-    
-    def close
-      #no-op
-    end
-  end
-  
 end
