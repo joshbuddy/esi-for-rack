@@ -14,6 +14,20 @@ class EsiForRack
     @lookup = lookup
   end
   
+  def self.response_body_to_str(response_body)
+    if response_body.respond_to? :to_str
+      response_body.to_str
+    elsif response_body.respond_to?(:each)
+      body = ''
+      response_body.each { |part|
+        body << part.to_s
+      }
+      body
+    else
+      raise TypeError, "stringable or iterable required"
+    end
+  end
+  
   def call(env)
     @lookup ||= [Lookup::PassThrough.new(@app, env), Lookup::Http.new(@app, env)]
     request = Rack::Request.new(env)
@@ -21,10 +35,7 @@ class EsiForRack
     response = Rack::Response.new(result[2], result[0], result[1])
 
     if response['Content-Type'] =~ /text\/html/
-      body = ""
-      response.body.each do |part|
-        body << part
-      end
+      body = EsiForRack.response_body_to_str(result.last)
       
       user_agent_hash = {}
       begin

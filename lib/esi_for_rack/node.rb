@@ -40,8 +40,7 @@ class EsiForRack
     end
     
     class Vars < Node
-      def execute                                    
-        #@content = node.inner_html
+      def execute
         @content = Rack::Utils.unescape(node.inner_html)
         EsiAttributeLanguage::SimpleGrammar.parse(@content).execute(context.resolver)
       end
@@ -147,8 +146,8 @@ class EsiForRack
           end
           break if should_break
         end
-        
       end
+      
     end
     
   end

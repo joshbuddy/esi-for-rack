@@ -47,18 +47,7 @@ class EsiForRack
 
         response = @app.call(request)
         if response.first == 200
-          response_body = response.last
-          if response_body.respond_to? :to_str
-            response_body.to_str
-          elsif response_body.respond_to?(:each)
-            body = ''
-            response_body.each { |part|
-              body << part.to_s
-            }
-            body
-          else
-            raise TypeError, "stringable or iterable required"
-          end
+          EsiForRack.response_body_to_str(response.last)
         else
           nil
         end
