@@ -67,7 +67,11 @@ class EsiForRack
         :QUERY_STRING => request.GET
       }
       context = Node::Context.new(binding, @lookup)
-      [response.status, response.headers, [context.parse(body).to_s]]
+      
+      parsed_body = context.parse(body).to_s
+      response.header['Content-Length'] = parsed_body.size.to_s
+      
+      [response.status, response.headers, [parsed_body]]
     else
       result
     end
