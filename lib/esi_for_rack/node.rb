@@ -41,7 +41,7 @@ class EsiForRack
     
     class Vars < Node
       def execute
-        @content = Rack::Utils.unescape(node.inner_html)
+        @content = node.to_str
         EsiAttributeLanguage::SimpleGrammar.parse(@content).execute(context.resolver)
       end
     end
