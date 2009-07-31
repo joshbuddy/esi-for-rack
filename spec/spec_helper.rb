@@ -3,7 +3,7 @@ require 'lib/esi_for_rack'
 
 def build_app(file, lookup)
   builder = Rack::Builder.new do
-    use EsiForRack
+    use EsiForRack, lookup
     
     run proc { |env|
       data = if env['PATH_INFO'] == '/'

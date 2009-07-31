@@ -113,16 +113,24 @@ class EsiForRack
     
       def parse(document)
         document.gsub!('esi:', 'esi_')
+        document.gsub!(/(<\/?esi_[^>]*>)/, ']]>\1<![CDATA[')
+        document[0,0] = %|<?xml version="1.0"?>\n<esi_root><![CDATA[|
+        document << ']]></esi_root>'
         
-        @doc = Nokogiri::HTML(document)
+        @doc = Nokogiri::XML(document)
         
         @doc.css('esi_comment').each do |esi_comment|
           esi_comment.replace(Nokogiri::XML::CDATA.new(doc, ''))
         end
         
-        process(@doc)
+        process(@doc.css('esi_root')[0])
         
-        @doc
+        result = ''
+        @doc.css('esi_root')[0].children.each do |n|
+          result << n.to_str
+        end
+        
+        result
       end
 
       def process(doc_fragment)

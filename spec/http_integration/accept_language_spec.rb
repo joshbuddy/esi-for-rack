@@ -16,7 +16,7 @@ describe "esi user agent variable lookups" do
 
     request = Rack::MockRequest.env_for("/?#{Rack::Utils.build_query(vars)}")
     request['HTTP_ACCEPT_LANGUAGE'] = 'da, en-gb;q=0.8, en;q=0.7'
-    builder.call(request).last.should == ["<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n<html><body>\nENDAEN-GB\n</body></html>\n"]
+    builder.call(request).last.should == ["<html><body>\nEN\nDA\nEN-GB\n\n</body></html>"]
     
   end
   

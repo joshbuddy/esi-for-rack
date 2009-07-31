@@ -16,12 +16,12 @@ describe "esi try" do
   
   it "should include normally within an attempt block" do
     build_app('spec/tags/fixtures/try/include.html', {'/great' => "<p>This is great</p>"}).last.should == 
-      ["<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n<html><body><p>This is great</p></body></html>\n"]
+      ["\n    <p>This is great</p>\n  \n"]
   end
   
   it "should render the except block when the include fails within an attempt block" do
     build_app('spec/tags/fixtures/try/include.html', {}).last.should == 
-      ["<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n<html><body>This is bad</body></html>\n"]
+      ["This is bad\n"]
   end
   
   
