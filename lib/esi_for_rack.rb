@@ -34,9 +34,7 @@ class EsiForRack
     result = @app.call(env)
     response = Rack::Response.new(result[2], result[0], result[1])
 
-    if response['Content-Type'] =~ /text\/html/
-      body = EsiForRack.response_body_to_str(result.last)
-      
+    if response['Content-Type'] =~ /text\/html/ && (body = EsiForRack.response_body_to_str(result.last)) && body.index('<esi:')
       user_agent_hash = {}
       begin
         user_agent = ParseUserAgent.new.parse(env['HTTP_USER_AGENT'] || '-')

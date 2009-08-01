@@ -13,8 +13,7 @@ class EsiForRack
     end
       
     def execute_in_place!
-      value = execute.to_s
-      node.replace(Nokogiri::XML::CDATA.new(node.document, value))
+      node.replace(Nokogiri::XML::CDATA.new(node.document, execute.to_s))
     end
 
     class Include < Node
@@ -41,8 +40,7 @@ class EsiForRack
     
     class Vars < Node
       def execute
-        @content = node.to_str
-        EsiAttributeLanguage::SimpleGrammar.parse(@content).execute(context.resolver)
+        EsiAttributeLanguage::SimpleGrammar.parse(node.to_str).execute(context.resolver)
       end
     end
     
@@ -71,19 +69,19 @@ class EsiForRack
     class Choose < Node
       def execute
         whens = node.css('esi_when').to_a
-        raise "no when's within choose" if whens.empty?
+        raise "choose block contains no when elements" if whens.empty?
         
         otherwise = node.css('esi_otherwise')[0]
 
         whens.each do |esi_when|
           if EsiAttributeLanguage::Grammar.parse(esi_when['test']).execute(context.resolver).equal?(true)
             context.process(esi_when)
-            return esi_when.inner_html
+            return esi_when.to_str
           end
         end
         if otherwise
           context.process(otherwise)
-          return otherwise.inner_html
+          return otherwise.to_str
         end
         nil
       end
@@ -139,7 +137,6 @@ class EsiForRack
         loop do
           should_break = true
           doc_fragment.css('esi_try,esi_choose,esi_vars,esi_include').each do |esi_node|
-            should_break = false
             case esi_node.name.to_sym
             when :esi_include
               @include.init(esi_node, self).execute_in_place!
@@ -149,6 +146,7 @@ class EsiForRack
               @vars.init(esi_node, self).execute_in_place!
             when :esi_try
               @try.init(esi_node, self).execute_in_place!
+              should_break = false
               break
             end
           end
