@@ -2,10 +2,11 @@ require 'nokogiri'
 require 'set'
 
 require 'esi_attribute_language'
-require 'parse_user_agent'
+require 'spy_vs_spy'
+require 'dirge'
 
-require File.join(File.dirname(__FILE__), 'esi_for_rack', 'node')
-require File.join(File.dirname(__FILE__), 'esi_for_rack', 'lookup')
+require ~'esi_for_rack/node'
+require ~'esi_for_rack/lookup'
 
 class EsiForRack
   
@@ -37,21 +38,22 @@ class EsiForRack
     if response['Content-Type'] =~ /text\/html/ && (body = EsiForRack.response_body_to_str(result.last)) && body.index('<esi:')
       user_agent_hash = {}
       begin
-        user_agent = ParseUserAgent.new.parse(env['HTTP_USER_AGENT'] || '-')
+        user_agent = SOC::SpyVsSpy.new(env['HTTP_USER_AGENT'] || '-')
         user_agent_hash['browser'] = case user_agent.browser
         when  'Firefox' then 'MOZILLA'
         when  'MSIE'    then 'MSIE'
         else;                'OTHER'
         end
 
-        user_agent_hash['version'] = user_agent.browser_version_major
-
-        user_agent_hash['os'] = case user_agent.ostype
-        when  'Windows'   then 'WIN'
-        when  'Macintosh' then 'MAC'
-        else;                  'OTHER'
+        user_agent_hash['version'] = [user_agent.version.major, user_agent.version.minor].compact.join('.')
+        
+        user_agent_hash['os'] = if user_agent.os.windows?
+          'WIN'
+        elsif user_agent.os.osx?
+          'MAC'
+        else
+          'OTHER'
         end
-
       rescue
         # error parsing ua
       end

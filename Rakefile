@@ -9,10 +9,12 @@ begin
     s.homepage = "http://github.com/joshbuddy/esi_for_rack"
     s.authors = ["Joshua Hull"]
     s.files = FileList["[A-Z]*", "{lib,spec}/**/*"]
-    s.add_dependency 'joshbuddy-esi_attribute_language'
+    s.add_dependency 'esi_attribute_language'
     s.add_dependency 'nokogiri'
-    s.add_dependency 'jaxn-parse_user_agent'
+    s.add_dependency 'spy-vs-spy'
+    s.add_dependency 'dirge'
   end
+  Jeweler::GemcutterTasks.new
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end

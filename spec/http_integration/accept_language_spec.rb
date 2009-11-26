@@ -1,6 +1,6 @@
 require 'spec/spec_helper'
 
-describe "esi user agent variable lookups" do
+describe "esi accept language lookups" do
   
   it "should lookup a cookie variable" do
     
